@@ -3,5 +3,9 @@ module.exports = {
   rules: {
     'comma-dangle': 0,
     'no-param-reassign': [2, { props: false }]
+  },
+  env: {
+    node: true,
+    mocha: true
   }
 };

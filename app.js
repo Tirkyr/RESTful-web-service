@@ -5,9 +5,16 @@ const debug = require('debug')('app');
 const uri = process.MONGO_URI || 'mongodb://localhost:27017/bookAPI';
 mongoose.set('useUnifiedTopology', true);
 mongoose.set('useNewUrlParser', true);
-const db = mongoose.connect(uri)
-  .then(debug('Connected to mongoDB'))
-  .catch((err) => debug(err));
+
+if (process.env.ENV === 'Test') {
+  const db = mongoose.connect(`${uri}_Test`)
+    .then(debug('Connected to bookAPI_Test'))
+    .catch((err) => debug(err));
+} else {
+  const db = mongoose.connect(uri)
+    .then(debug('Connected to bookAPI'))
+    .catch((err) => debug(err));
+}
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -23,6 +30,8 @@ app.get('/', (req, res) => {
   res.send('Welcome to my Nodemon API');
 });
 
-app.listen(port, () => {
+app.server = app.listen(port, () => {
   debug(`Running on port ${port}`);
 });
+
+module.exports = app;
